@@ -1,0 +1,6 @@
+com\librarymanager\Book.class
+com\librarymanager\DataLoader.class
+com\librarymanager\BookController.class
+com\librarymanager\BookRepository.class
+com\librarymanager\LibraryManagerApplication.class
+com\librarymanager\SearchController.class
