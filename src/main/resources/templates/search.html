@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图书搜索</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .search-form { margin-bottom: 20px; }
+        .search-form input, .search-form button { padding: 8px; margin-right: 10px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .pagination { margin-top: 20px; }
+        .pagination a { margin: 0 5px; text-decoration: none; padding: 5px 10px; border: 1px solid #ddd; }
+        .pagination a.active { background-color: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+    <h1>图书搜索</h1>
+    <form class="search-form" th:action="@{/search}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="输入书名或作者关键词" />
+        <button type="submit">搜索</button>
+    </form>
+
+    <div th:if="${books != null and !books.empty}">
+        <table>
+            <thead>
+                <tr>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>可借数量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.title}"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.availableQuantity}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <a th:if="${currentPage > 0}" th:href="@{/search(keyword=${keyword}, page=${currentPage - 1})}">上一页</a>
+            <span th:if="${totalPages > 0}">
+                <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                   th:href="@{/search(keyword=${keyword}, page=${i})}"
+                   th:class="${i == currentPage} ? 'active' : ''"
+                   th:text="${i + 1}"></a>
+            </span>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/search(keyword=${keyword}, page=${currentPage + 1})}">下一页</a>
+        </div>
+    </div>
+
+    <div th:if="${books != null and books.empty}">
+        <p>未找到相关图书</p>
+    </div>
+</body>
+</html>
